@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="{% static 'vendor/bootstrap-icons/font/bootstrap-icons.css' %}">
 
     <!-- CSS Front Template -->
-    <link rel="stylesheet" href="{% static 'css/theme.min.css?v=1.0' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.min.css' %}">
     {% block extra_css %} {% endblock extra_css %}
 
     {% block extra_css_no_compress %} {% endblock extra_css_no_compress %}
@@ -158,7 +158,7 @@
 
 <!-- ========== MAIN CONTENT ========== -->
 
-<main id="content" role="main">{% block content %} {% endblock content %}</main>
+{% block content %} {% endblock content %}
 
 <!-- ========== END CONTENT ========== -->
 
