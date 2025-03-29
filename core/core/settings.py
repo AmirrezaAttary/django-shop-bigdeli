@@ -39,8 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    # created my app
     'website',
-    'accounts'
+    'accounts',
+    
+    # other app for internet
+
 ]
 
 
@@ -149,6 +153,7 @@ EMAIL_HOST_USER = config("EMAIL_HOST_USER",default="")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD",default="")
 
 
+
 SHOW_DEBUGGER_TOOLBAR = config("SHOW_DEBUGGER_TOOLBAR", cast=bool, default=True)
 if SHOW_DEBUGGER_TOOLBAR:
     INSTALLED_APPS += [
@@ -166,3 +171,9 @@ if SHOW_DEBUGGER_TOOLBAR:
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL= '/'
+
+
+# change time for active token password-reset 
+
+PASSWORD_RESET_TIMEOUT_DAYS = 2
+
