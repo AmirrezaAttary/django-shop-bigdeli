@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     # created my app
     'website',
     'accounts',
-    
+    'shop',
     # other app for internet
 
 ]
