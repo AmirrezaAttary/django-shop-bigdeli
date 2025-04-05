@@ -343,114 +343,118 @@
 
             <div class="d-grid gap-3 mb-10"></div>
             {% for object in object_list %}
-                <!-- Card -->
-                <div class="card card-bordered card-stretched-vertical shadow-none">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="card-pinned">
-                                <img class="card-img" src="{{object.image.url}}" alt="Image Description">
-                            </div>
+            <!-- Card -->
+            <div class="card card-bordered card-stretched-vertical shadow-none">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="card-pinned">
+                            <img class="card-img" src="{{object.image.url}}" alt="Image Description">
                         </div>
-                        <!-- End Col -->
-
-                        <div class="col-sm-8">
-                            <div class="card-body">
-                                <div class="mb-2">
-                                    {% for cat in object.category.all %}
-                                    <a class="link-sm link-secondary" href="#">{{cat.title}}</a>
-                                    {% if not forloop.last %}, {% endif %}
-                                    {% endfor %}
-                                </div>
-
-                                <div class="mb-2">
-                                    <h4 class="card-title">
-                                        <a class="text-dark" href="/product-overview.html">{{object.title}}</a>
-                                    </h4>
-                                    <p class="card-text text-dark">{{object.get_price}}</p>
-                                </div>
-
-                                <!-- Rating -->
-                                <div class="mb-3">
-                                    <a class="d-inline-flex align-items-center" href="#">
-                                        <div class="d-flex gap-1 ms-2">
-                                            <img src="{% static 'svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                                            <img src="{% static 'svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                                            <img src="{% static 'svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                                            <img src="{% static 'svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                                            <img src="{% static 'svg/illustrations/star-muted.svg' %}" alt="Review rating"
-                                                width="16">
-                                        </div>
-                                        <span class="small">40</span>
-                                    </a>
-                                </div>
-                                <!-- End Rating -->
-
-                                <div class="card-footer">
-                                    <div class="d-flex gap-2">
-                                        <button type="button"
-                                            class="btn btn-outline-primary btn-sm btn-transition rounded-pill">افزودن به
-                                            سبد خرید</button>
-                                        <button type="button"
-                                            class="btn btn-soft-secondary btn-sm btn-transition rounded-pill">
-                                            <i class="bi-heart ms-1"></i>افزودن به علایق</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Col -->
                     </div>
-                    <!-- End Row -->
-                </div>
-                <!-- End Card -->
-            {% endfor %}
-            </div>
+                    <!-- End Col -->
 
-            <!-- Pagination -->
-            {% if page_obj.has_other_pages %}
-            <!-- Pagination -->
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    {% if page_obj.has_previous %}
+                    <div class="col-sm-8">
+                        <div class="card-body">
+                            <div class="mb-2">
+                                {% for cat in object.category.all %}
+                                <a class="link-sm link-secondary" href="#">{{cat.title}}</a>
+                                {% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <div class="mb-2">
+                                <h4 class="card-title">
+                                    <a class="text-dark" href="{% url 'shop:product-detail' slug=object.slug %}">{{object.title}}</a>
+                                </h4>
+                                <p class="card-text text-dark">{{object.get_price}}</p>
+                            </div>
+
+                            <!-- Rating -->
+                            <div class="mb-3">
+                                <a class="d-inline-flex align-items-center" href="#">
+                                    <div class="d-flex gap-1 ms-2">
+                                        <img src="{% static 'svg/illustrations/star.svg' %}" alt="Review rating"
+                                            width="16">
+                                        <img src="{% static 'svg/illustrations/star.svg' %}" alt="Review rating"
+                                            width="16">
+                                        <img src="{% static 'svg/illustrations/star.svg' %}" alt="Review rating"
+                                            width="16">
+                                        <img src="{% static 'svg/illustrations/star.svg' %}" alt="Review rating"
+                                            width="16">
+                                        <img src="{% static 'svg/illustrations/star-muted.svg' %}" alt="Review rating"
+                                            width="16">
+                                    </div>
+                                    <span class="small">40</span>
+                                </a>
+                            </div>
+                            <!-- End Rating -->
+
+                            <div class="card-footer">
+                                <div class="d-flex gap-2">
+                                    <button type="button"
+                                        class="btn btn-outline-primary btn-sm btn-transition rounded-pill">افزودن به
+                                        سبد خرید</button>
+                                    <button type="button"
+                                        class="btn btn-soft-secondary btn-sm btn-transition rounded-pill">
+                                        <i class="bi-heart ms-1"></i>افزودن به علایق</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Col -->
+                </div>
+                <!-- End Row -->
+            </div>
+            <!-- End Card -->
+            {% empty %}
+            <div class="row text-center w-100 py-5">
+                <p class="text-center">هیچ کالایی برای نمایش وجود ندارد</p>
+            </div>
+            <!-- End Col -->
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">
+                            <i class="bi bi-chevron-double-right small"></i>
+                        </span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <li class="page-item"><a
+                        class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
                     <li class="page-item">
-                        <button class="page-link" onclick="changePage(`{{ page_obj.previous_page_number }}`)"
-                            aria-label="Previous">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
                             <span aria-hidden="true">
-                                <i class="bi-chevron-double-right small"></i>
+                                <i class="bi bi-chevron-double-left small"></i>
                             </span>
-                        </button>
+                        </a>
                     </li>
                     {% endif %}
-                    {{page_obj.page_range}}
-                    {% for i in page_obj.paginator.page_range %}
-                    {% if page_obj.number == i %}
-                    <li class="page-item active"><a class="page-link">{{ i }}</a></li>
-                    {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <li class="page-item">
-                        <button class="page-link" onclick="changePage(`{{i}}`)">{{ i }}</button></li>
 
-                        {% endif %}
-
-                        {% endfor %}
-
-
-                        {% if page_obj.has_next %}
-                        <li class="page-item">
-                            <button class="page-link" onclick="changePage(`{{ page_obj.next_page_number }}`)"
-                                aria-label="Previous">
-                                <span aria-hidden="true">
-                                    <i class="bi-chevron-double-left small"></i>
-                                </span>
-                            </button>
-                        </li>
-                        {% endif %}
-
-                </ul>
-            </nav>
-            {% endif %}
-            <!-- End Pagination -->
-        </div>
-        <!-- End Col -->
+            </ul>
+        </nav>
+        {% endif %}
+        <!-- End Pagination -->
     </div>
-    <!-- End Row -->
+    <!-- End Col -->
+</div>
+<!-- End Row -->
 </div>
 <!-- End Card Grid -->
 
