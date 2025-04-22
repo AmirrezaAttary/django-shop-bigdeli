@@ -31,10 +31,16 @@
 
           <div class="card-body">
             <div class="mb-1">
-              <a class="link-sm link-secondary" href="#">تجهیزات جانبی</a>
+              
+              {% for cat in product.category.all %}
+              <a class="link-sm link-secondary" href="#">{{cat}}</a>
+              {% if not forloop.last %}, {% endif %}
+              {% endfor %}
+                
+              
             </div>
-            <a class="text-body" href="/product-overview.html">کوله پشتی هرشل به رنگ آبی تیره</a>
-            <p class="card-text text-dark">$56.99</p>
+            <a class="text-body" href="/product-overview.html">{{product.title}}</a>
+            <p class="card-text text-dark">{{product.get_price}}</p>
           </div>
 
           <div class="card-footer pt-0">
