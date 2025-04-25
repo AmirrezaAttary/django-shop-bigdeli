@@ -597,6 +597,7 @@
                 success: function (response) {
                     $("#total-cart-item-count").html(response.total_quantity)
                     console.log(response);
+                    window.location.reload();
                     // do something with the response data
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
