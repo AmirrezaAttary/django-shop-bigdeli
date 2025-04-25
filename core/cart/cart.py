@@ -49,7 +49,6 @@ class CartSession:
 
     def has_product(self, product_id):
         count = sum(1 for item in self._cart["items"] if item["product_id"] == product_id)
-        print(count)
         return count
 
 
@@ -61,3 +60,33 @@ class CartSession:
 
     def save(self):
         self.session.modified = True
+
+
+
+    def decrease_product_quantity(self, product_id):
+        for item in self._cart["items"]:
+            if product_id == item["product_id"]:
+                if item["quantity"] > 1:
+                    item["quantity"] -= 1
+                else:
+                    self._cart["items"].remove(item)  # یا می‌تونی فقط quantity رو صفر کنی
+                break
+        else:
+            return  # اگر محصول در سبد نبود کاری نکن
+        self.save()
+
+
+
+    def increase_product_quantity(self, product_id):
+        # بررسی اینکه آیا محصول در سبد خرید وجود دارد یا خیر
+        for item in self._cart["items"]:
+            if product_id == item["product_id"]:
+                item["quantity"] += 1  # افزایش مقدار محصول
+                break
+        else:
+            # اگر محصول در سبد خرید نباشد، آن را به سبد اضافه کن
+            self._cart["items"].append({
+                "product_id": product_id,
+                "quantity": 1  # شروع تعداد از 1
+            })
+        self.save()  # ذخیره تغییرات

@@ -1,11 +1,12 @@
 from django.views.generic import (
     ListView,
     DetailView,
-
+    View
     )
 from shop.models import ProductModel,ProductStatusType,ProductCategoryModel
 from django.core.exceptions import FieldError
 from cart.cart import CartSession
+from django.http import JsonResponse
 # Create your views here.
 
 class ShopProductListView(ListView):
@@ -61,6 +62,37 @@ class ShopProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        product = self.get_object()
+        cart_item = self.request.session.get('cart', {'items': []})
+        
 
+        quantity = 1
+
+        for item in cart_item.get('items', []):
+            if item['product_id'] == str(product.id):
+                quantity = item.get('quantity', 1)
+                break
+
+        context['in_cart'] = quantity > 1 or any(item['product_id'] == str(product.id) for item in cart_item.get('items', []))
+        context['quantity'] = quantity
         return context
     
+
+class ShopProductRemoveOneQuantityView(View):
+
+    def post(self,request,*args,**kwargs):
+        cart = CartSession(request.session)
+        product_id = request.POST.get("product_id")
+        cart.decrease_product_quantity(product_id)
+
+        return JsonResponse({"cart":cart.get_cart_dict()})
+
+
+class ShopProductAddOneQuantityView(View):
+
+    def post(self,request,*args,**kwargs):
+        cart = CartSession(request.session)
+        product_id = request.POST.get("product_id")
+        cart.increase_product_quantity(product_id)
+
+        return JsonResponse({"cart":cart.get_cart_dict()})
