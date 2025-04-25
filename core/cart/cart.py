@@ -47,6 +47,12 @@ class CartSession:
 
         return self._cart["items"]
 
+    def has_product(self, product_id):
+        count = sum(1 for item in self._cart["items"] if item["product_id"] == product_id)
+        print(count)
+        return count
+
+
     def get_total_payment_amount(self):
         return sum(item["total_price"] for item in self._cart["items"])
 
