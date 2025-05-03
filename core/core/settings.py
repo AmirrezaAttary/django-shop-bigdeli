@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'accounts',
     'shop',
     'cart', 
+    'dashboard',
+    
     # other app for internet
     
 ]
