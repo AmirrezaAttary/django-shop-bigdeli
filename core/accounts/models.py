@@ -4,6 +4,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
+from django.core.validators import RegexValidator
 from accounts.validators import validate_iranian_cellphone_number
 
 
@@ -74,14 +75,17 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=12, validators=[validate_iranian_cellphone_number])
-
+    image = models.ImageField(upload_to="profile/",default="profile/default.png")
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
-
+    def get_fullname(self):
+        if self.first_name or self.last_name:
+            return self.first_name + " " + self.last_name
+        return "کاربر جدید"
     
 @receiver(post_save,sender=User)
 def create_profile(sender,instance,created,**kwargs):
-    if created and instance.type == UserType.customer.value:
+    if created:
         Profile.objects.create(user=instance, pk=instance.pk)
         
