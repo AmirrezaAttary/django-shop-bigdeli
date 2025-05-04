@@ -1,8 +1,3 @@
-from typing import Any
-from django.db.models.base import Model as Model
-from django.db.models.query import QuerySet
-from django.forms.models import BaseModelForm
-from django.http import HttpResponse
 from django.views.generic import View, TemplateView,UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from dashboard.permissions import HasAdminAccessPermission
@@ -13,9 +8,6 @@ from django.urls import reverse_lazy
 from accounts.models import Profile
 from django.shortcuts import redirect
 from django.contrib import messages
-
-class AdminDashboardHomeView(LoginRequiredMixin, HasAdminAccessPermission, TemplateView):
-    template_name = "dashboard/admin/home.html"
 
 
 class AdminSecurityEditView(LoginRequiredMixin, HasAdminAccessPermission,SuccessMessageMixin, auth_views.PasswordChangeView):
@@ -33,9 +25,7 @@ class AdminProfileEditView(LoginRequiredMixin, HasAdminAccessPermission,SuccessM
     
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
-    
-    
-    
+
 class AdminProfileImageEditView(LoginRequiredMixin, HasAdminAccessPermission,SuccessMessageMixin,UpdateView):
     http_method_names=["post"]
     model = Profile
@@ -51,5 +41,3 @@ class AdminProfileImageEditView(LoginRequiredMixin, HasAdminAccessPermission,Suc
     def form_invalid(self, form):
         messages.error(self.request,"ارسال تصویر با مشکل مواجه شده لطف مجدد بررسی و تلاش نمایید")
         return redirect(self.success_url)
-
-    
