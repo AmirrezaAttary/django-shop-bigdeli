@@ -47,7 +47,8 @@
     <!-- End Header -->
 
     <!-- Body -->
-    <form action="." method="post" enctype="multipart/form-data">
+    <form action="." method="post" enctype="multipart/form-data">\
+        {{ form.media }}
         {% csrf_token %}
         <div class="card-body">
             <div class="row d-flex ">
@@ -88,7 +89,7 @@
                 </div>
                 <div class="col-md-12 mb-3">
                     <label>توضیحات</label>
-                    {{form.description}}
+                    {{form.description|safe}}
                 </div>
 
                 <div class="col-md-12 mb-3">
