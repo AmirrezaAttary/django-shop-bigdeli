@@ -84,6 +84,8 @@ class ShopProductRemoveOneQuantityView(View):
         cart = CartSession(request.session)
         product_id = request.POST.get("product_id")
         cart.decrease_product_quantity(product_id)
+        if request.user.is_authenticated:
+            cart.merge_session_cart_in_db(request.user)
 
         return JsonResponse({"cart":cart.get_cart_dict()})
 
@@ -94,5 +96,7 @@ class ShopProductAddOneQuantityView(View):
         cart = CartSession(request.session)
         product_id = request.POST.get("product_id")
         cart.increase_product_quantity(product_id)
+        if request.user.is_authenticated:
+            cart.merge_session_cart_in_db(request.user)
 
         return JsonResponse({"cart":cart.get_cart_dict()})
