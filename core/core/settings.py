@@ -29,7 +29,6 @@ DEBUG = config("DEBUG",cast=bool,default=True)
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast= lambda v: [item.strip() for item in v.split(',')] ,default="*")
 
 
-
 # Application definition
 
 INSTALLED_APPS = [
