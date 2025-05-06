@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'cart', 
     'dashboard',
     'order',
+    'payment',
     
     # other app for internet
     'django_ckeditor_5',
