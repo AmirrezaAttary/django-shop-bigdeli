@@ -19,8 +19,6 @@ class PaymentModel(models.Model):
     
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"Payment - {self.get_status_display()}"
-
     
+    def __str__(self):
+        return self.authority_id
