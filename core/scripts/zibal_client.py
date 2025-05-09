@@ -1,11 +1,10 @@
 import requests
 import json
 
-
-class ZarinPalSandbox:
-    _payment_request_url = "https://sandbox.zarinpal.com/pg/v4/payment/request.json"
-    _payment_verify_url = "https://sandbox.zarinpal.com/pg/v4/payment/verify.json"
-    _payment_page_url = "https://sandbox.zarinpal.com/pg/StartPay/"
+class ZibalSandbox:
+    _payment_request_url = "https://sandbox.zibal.ir/v1/request"
+    _payment_verify_url = "https://sandbox.zibal.ir/v1/verify"
+    _payment_page_url = "https://sandbox.zibal.ir/start/"
     _callback_url = "http://redreseller.com/verify"
 
     def __init__(self, merchant_id):
@@ -13,10 +12,10 @@ class ZarinPalSandbox:
 
     def payment_request(self, amount, description="پرداختی کاربر"):
         payload = {
-            "merchant_id": self.merchant_id,
-            "amount": str(amount),
-            "callback_url": self._callback_url,
-            "description": description,
+            "merchant": self.merchant_id,
+            "amount": amount,
+            "callbackUrl": self._callback_url,
+            "description": description
         }
         headers = {
             'Content-Type': 'application/json'
@@ -27,11 +26,11 @@ class ZarinPalSandbox:
 
         return response.json()
 
-    def payment_verify(self,amount,authority):
+    def payment_verify(self, amount, track_id):
         payload = {
-            "merchant_id": self.merchant_id,
+            "merchant": self.merchant_id,
             "amount": amount,
-            "authority": authority
+            "trackId": track_id
         }
         headers = {
             'Content-Type': 'application/json'
@@ -40,10 +39,5 @@ class ZarinPalSandbox:
         response = requests.post(self._payment_verify_url, headers=headers, data=json.dumps(payload))
         return response.json()
 
-    def generate_payment_url(self,authority):
-        return self._payment_page_url + authority
-
-
-
-
-    
+    def generate_payment_url(self, track_id):
+        return self._payment_page_url + str(track_id)
