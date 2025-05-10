@@ -44,6 +44,15 @@ class ZarinPalSandbox:
         return self._payment_page_url + authority
 
 
-
-
+if __name__ == "__main__":
+    zarinpal = ZarinPalSandbox(merchant_id="4ced0a1e-4ad8-4309-9668-3ea3ae8e8897")
+    response =zarinpal.payment_request(15000)
     
+    print(response)
+    input("proceed to generating payment url?")
+    print(zarinpal.generate_payment_url(response['data']["authority"]))
+    
+    input("check the payment?")
+    
+    response = zarinpal.payment_verify(15000,response['data']["authority"])
+    print(response)
