@@ -9,7 +9,6 @@ from django.db import transaction
 from shop.models import ProductModel
 # Create your views here.
 
-    
 
 class PaymentVerifyView(View):
     
