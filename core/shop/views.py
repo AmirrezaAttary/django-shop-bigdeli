@@ -7,6 +7,8 @@ from shop.models import ProductModel,ProductStatusType,ProductCategoryModel,Wish
 from django.core.exceptions import FieldError
 from cart.cart import CartSession
 from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # Create your views here.
 
 class ShopProductListView(ListView):
@@ -102,3 +104,23 @@ class ShopProductAddOneQuantityView(View):
             cart.merge_session_cart_in_db(request.user)
 
         return JsonResponse({"cart":cart.get_cart_dict()})
+    
+    
+    
+    
+    
+class AddOrRemoveWishlistView(LoginRequiredMixin,View):
+    
+    def post(self,request,*args,**kwargs):
+        product_id = request.POST.get("product_id")
+        message = ""
+        if product_id:
+            try:
+                wishlist_item =WishlistProductModel.objects.get(user=request.user,product__id=product_id)
+                wishlist_item.delete()
+                message="محصول از لیست علایق حذف شد"
+            except WishlistProductModel.DoesNotExist:
+                WishlistProductModel.objects.create(user=request.user,product_id=product_id)
+                message="محصول به لیست علایق اضافه شد"
+        
+        return JsonResponse({"message":message})
