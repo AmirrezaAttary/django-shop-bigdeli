@@ -3,7 +3,7 @@ from django.views.generic import (
     DetailView,
     View
     )
-from shop.models import ProductModel,ProductStatusType,ProductCategoryModel
+from shop.models import ProductModel,ProductStatusType,ProductCategoryModel,WishlistProductModel
 from django.core.exceptions import FieldError
 from cart.cart import CartSession
 from django.http import JsonResponse
@@ -52,6 +52,7 @@ class ShopProductGridView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['total_items'] = self.get_queryset().count()
+        context["wishlist_items"] = WishlistProductModel.objects.filter(user=self.request.user).values_list("product__id",flat=True)
         context["categories"] = ProductCategoryModel.objects.all()
         return context
     
@@ -75,6 +76,7 @@ class ShopProductDetailView(DetailView):
 
         context['in_cart'] = quantity > 1 or any(item['product_id'] == str(product.id) for item in cart_item.get('items', []))
         context['quantity'] = quantity
+        context["is_wished"] = WishlistProductModel.objects.filter(user=self.request.user,product__id=self.get_object().id).exists()
         return context
     
 
