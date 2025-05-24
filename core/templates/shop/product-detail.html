@@ -72,7 +72,7 @@
         <div class="col-md-5">
             <!-- Rating -->
             <div class="d-flex justify-content-between">
-                
+
                 <!-- Rating -->
                 <a class="d-flex gap-1 mb-4" href="#reviewSection">
                     <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
@@ -83,10 +83,11 @@
                     <span class="ms-1">287 نظر</span>
                 </a>
                 <!-- End Rating -->
-                 {% if request.user.is_authenticated %}
+                {% if request.user.is_authenticated %}
                 <button type="button"
                     class="btn btn-outline-secondary btn-xs btn-icon rounded-circle {% if is_wished %} active {% endif %}"
-                    data-bs-toggle="tooltip" data-bs-placement="top" title="افزودن به علایق" onclick="addToWishlist(this,`{{object.id}}`)">
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="افزودن به علایق"
+                    onclick="addToWishlist(this,`{{object.id}}`)">
                     <i class="bi-heart"></i>
                 </button>
                 {% endif %}
@@ -201,13 +202,14 @@
                 <div class="js-quantity-counter row align-items-center">
                     <div class="col">
                         <span class="d-block small">تعداد را انتخاب کنید</span>
-                        <input class="js-result form-control form-control-quantity-counter" type="text" value="{{ quantity }}">
+                        <input class="js-result form-control form-control-quantity-counter" type="text"
+                            value="{{ quantity }}">
                     </div>
                     <!-- End Col -->
 
                     <div class="col-auto">
                         <a class="js-minus btn btn-outline-secondary btn-xs btn-icon rounded-circle"
-                             onclick="removeOneProductQuantity('{{object.id}}')">
+                            onclick="removeOneProductQuantity('{{object.id}}')">
                             <svg width="8" height="2" viewBox="0 0 8 2" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M0 1C0 0.723858 0.223858 0.5 0.5 0.5H7.5C7.77614 0.5 8 0.723858 8 1C8 1.27614 7.77614 1.5 7.5 1.5H0.5C0.223858 1.5 0 1.27614 0 1Z"
@@ -215,7 +217,7 @@
                             </svg>
                         </a>
                         <a class="js-plus btn btn-outline-secondary btn-xs btn-icon rounded-circle" href="javascript:;"
-                        onclick="addOneProductQuantity('{{object.id}}')">
+                            onclick="addOneProductQuantity('{{object.id}}')">
                             <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M4 0C4.27614 0 4.5 0.223858 4.5 0.5V3.5H7.5C7.77614 3.5 8 3.72386 8 4C8 4.27614 7.77614 4.5 7.5 4.5H4.5V7.5C4.5 7.77614 4.27614 8 4 8C3.72386 8 3.5 7.77614 3.5 7.5V4.5H0.5C0.223858 4.5 0 4.27614 0 4C0 3.72386 0.223858 3.5 0.5 3.5H3.5V0.5C3.5 0.223858 3.72386 0 4 0Z"
@@ -228,11 +230,11 @@
                 <!-- End Row -->
             </div>
             {% else %}
-                <div class="d-grid mb-4">
-                    <button type="button" onclick="addToCart('{{object.id}}')" class="btn btn-primary btntransition">
-                        افزودن به سبد خرید
-                    </button>
-                </div>
+            <div class="d-grid mb-4">
+                <button type="button" onclick="addToCart('{{object.id}}')" class="btn btn-primary btntransition">
+                    افزودن به سبد خرید
+                </button>
+            </div>
             {% endif %}
 
 
@@ -442,7 +444,8 @@
                         </div>
                         <!-- End Col -->
 
-                        <div class="col-sm-auto">
+                        <div class="col-sm-auto mb-2">
+
                             <!-- Select -->
                             <select class="form-select form-select-sm">
                                 <option value="mostRecent" selected>اخیرا</option>
@@ -451,6 +454,11 @@
                                 <option value="newest">جدیدترین</option>
                             </select>
                             <!-- End Select -->
+                        </div>
+                        <div class="col-sm-auto mb-2 text-center">
+                            <button type="button" class="btn btn-primary btn-transition rounded-pill"
+                                data-bs-toggle="modal" data-bs-target="#submitReviewModal">
+                                ثبت دیدگاه</button>
                         </div>
                         <!-- End Col -->
                     </div>
@@ -621,10 +629,7 @@
                 </ul>
                 <!-- End Comment -->
 
-                <div class="d-sm-flex justify-content-sm-end gap-2">
-                    <a class="btn btn-link" href="#">ادامه مطلب <i class="bi-chevron-left small me-1"></i></a>
-                    <button type="button" class="btn btn-primary btn-transition rounded-pill">یک بررسی بنویسید</button>
-                </div>
+
             </div>
         </div>
         <!-- End Col -->
@@ -666,19 +671,60 @@
 </div>
 <!-- End Subscribe -->
 
-{% endblock content %}
+<!-- Modal -->
+<div class="modal fade" id="submitReviewModal" tabindex="-1" aria-labelledby="submitReviewModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="submitReviewModalLabel">فرم ارسال دیدگاه</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
+            <div class="modal-body">
+                <form action="{% url 'review:submit-review' %}" method="post" id="review-form">
+                    {% csrf_token %}
+                    <input hidden name="product" value="{{object.id}}">
+                    <div class="row">
+                        <div class="mb-3">
+                            <label class="form-label" for="rateModalInput">امتیاز</label>
+                            <select class="form-select form-select-sm" name="rate" required>
+                                <option value="1">1 ستاره</option>
+                                <option value="2">2 ستاره</option>
+                                <option value="3">3 ستاره</option>
+                                <option value="4">4 ستاره</option>
+                                <option value="5" selected>5 ستاره</option>
+
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="descriptionModalInput">توضیحات</label>
+                            <textarea type="email" class="form-control form-control-lg" name="email"
+                                id="descriptionModalInput" required> </textarea>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                <button class="btn btn-primary" type="submit" form="review-form">ثبت دیدگاه</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
 
 {% block extra_js %}
 <script>
-    function removeOneProductQuantity(product_id){
+    function removeOneProductQuantity(product_id) {
         $.ajax({
             url: "{%  url 'shop:product-remove-one-quantity' %}",
             method: 'POST',
             data: {
                 product_id: product_id,
                 csrfmiddlewaretoken: '{{ csrf_token }}'
-    
+
             },
             success: function (response) {
                 console.log(response);
@@ -691,14 +737,14 @@
             }
         });
     }
-    function addOneProductQuantity(product_id){
+    function addOneProductQuantity(product_id) {
         $.ajax({
             url: "{%  url 'shop:product-add-one-quantity' %}",
             method: 'POST',
             data: {
                 product_id: product_id,
                 csrfmiddlewaretoken: '{{ csrf_token }}'
-    
+
             },
             success: function (response) {
                 console.log(response);
