@@ -8,6 +8,7 @@ from django.core.exceptions import FieldError
 from cart.cart import CartSession
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from review.models import ReviewModel,ReviewStatusType
 
 # Create your views here.
 
@@ -77,6 +78,7 @@ class ShopProductDetailView(DetailView):
         context['quantity'] = quantity
         context["is_wished"] = context["is_wished"] = WishlistProductModel.objects.filter(
             user=self.request.user, product__id=self.get_object().id).exists() if self.request.user.is_authenticated else False
+        context["reviews"] = ReviewModel.objects.filter(product=product,status=ReviewStatusType.accepted.value)
         return context
     
 
