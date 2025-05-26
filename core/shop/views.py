@@ -78,7 +78,18 @@ class ShopProductDetailView(DetailView):
         context['quantity'] = quantity
         context["is_wished"] = context["is_wished"] = WishlistProductModel.objects.filter(
             user=self.request.user, product__id=self.get_object().id).exists() if self.request.user.is_authenticated else False
-        context["reviews"] = ReviewModel.objects.filter(product=product,status=ReviewStatusType.accepted.value)
+        reviews = ReviewModel.objects.filter(product=product,status=ReviewStatusType.accepted.value)
+        context["reviews"] = reviews
+        total_reviews_count =reviews.count()
+        context["reviews_count"] = {
+            f"rate_{rate}": reviews.filter(rate=rate).count() for rate in range(1, 6)
+        }
+        if total_reviews_count != 0:
+            context["reviews_avg"] = {
+                f"rate_{rate}": round((reviews.filter(rate=rate).count()/total_reviews_count)*100,2) for rate in range(1, 6)
+            }
+        else:
+            context["reviews_avg"] = {f"rate_{rate}": 0 for rate in range(1, 6)}
         return context
     
 
